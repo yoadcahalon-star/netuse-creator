@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Drive Network Script Generator (Separated Layout)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h2, h3 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        input[type="text"], input[type="password"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #555;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+        .toggle-container input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .btn-generate {
+            flex: 1;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-generate:hover {
+            background-color: #0056b3;
+        }
+        .btn-email {
+            flex: 1;
+            padding: 15px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-email:hover {
+            background-color: #117a8b;
+        }
+        .drive-list {
+            margin-top: 25px;
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+        }
+        .drive-item {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .domain-notice {
+            font-size: 12px;
+            color: #0056b3;
+            margin-top: 2px;
+            font-style: italic;
+        }
+        /* Specific Styles for Separated Sections */
+        .section-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        .startup-box {
+            border-left: 4px solid #ffc107; /* Warning / Amber indicator */
+        }
+        .email-box {
+            border-left: 4px solid #17a2b8; /* Teal info indicator */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Multi-Drive Map Generator</h2>
+    
+    <div class="form-group">
+        <label for="driveLetter">Drive Letter:</label>
+        <select id="driveLetter">
+            <option value="Z:">Z:</option>
+            <option value="Y:">Y:</option>
+            <option value="X:">X:</option>
+            <option value="W:">W:</option>
+            <option value="V:">V:</option>
+            <option value="U:">U:</option>
+            <option value="T:">T:</option>
+            <option value="S:">S:</option>
+            <option value="R:">R:</option>
+            <option value="Q:">Q:</option>
+            <option value="P:">P:</option>
+            <option value="O:">O:</option>
+            <option value="N:">N:</option>
+            <option value="M:">M:</option>
+            <option value="L:">L:</option>
+            <option value="K:">K:</option>
+            <option value="J:">J:</option>
+            <option value="I:">I:</option>
+            <option value="H:">H:</option>
+            <option value="G:">G:</option>
+            <option value="F:">F:</option>
+            <option value="E:">E:</option>
+            <option value="D:">D:</option>
+            <option value="B:">B:</option>
+            <option value="A:">A:</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ipAddress">IP Address / Server Name:</label>
+        <div class="input-row">
+            <input type="text" id="ipAddress" placeholder="e.g., 192.168.1.50">
+            <label class="toggle-container">
+                <input type="checkbox" id="keepIpToggle" checked> Keep IP
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="sharePath">Folder Share Name:</label>
+        <input type="text" id="sharePath" placeholder="e.g., SharedFolder">
+    </div>
+
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="e.g., jsmith">
+        <div class="domain-notice">* "emet.local\" will be automatically added to this script.</div>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter password">
+    </div>
+
+    <button class="btn-add" onclick="addDriveToList()">+ Add Drive to List</button>
+
+    <div class="drive-list">
+        <h3>Drives in Script Queue</h3>
+        <div id="queueContainer">
+            <p id="emptyMessage" style="text-align: center; color: #888;">No drives added yet.</p>
+        </div>
+    </div>
+
+    <div class="section-box startup-box">
+        <label class="toggle-container" style="font-weight: 600; font-size: 14px;">
+            <input type="checkbox" id="startupToggle"> Add Windows Startup persistence to this script
+        </label>
+        <div style="font-size: 12px; color: #6c757d; margin-top: 5px; padding-left: 22px;">
+            If checked, the generated script will configure itself to run automatically every time the user logs into Windows.
+        </div>
+    </div>
+
+    <div class="section-box email-box">
+        <div class="form-group" style="margin-bottom: 0;">
+            <label for="emailAddress" style="font-size: 14px; font-weight: 600;">Optional: Send Script via Email</label>
+            <div style="font-size: 12px; color: #6c757d; margin-bottom: 8px;">
+                Enter an address below to generate an email directly through your local mail application (like Outlook).
+            </div>
+            <input type="email" id="emailAddress" placeholder="recipient@yourdomain.com">
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn-generate" onclick="generateFinalScript('download')">Download Script (.bat)</button>
+        <button class="btn-email" onclick="generateFinalScript('email')">Generate Email</button>
+    </div>
+</div>
+
+<script>
+let driveQueue = [];
+
+function addDriveToList() {
+    const drive = document.getElementById('driveLetter').value;
+    let ip = document.getElementById('ipAddress').value.trim();
+    let share = document.getElementById('sharePath').value.trim();
+    let user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value;
+    const keepIp = document.getElementById('keepIpToggle').checked;
+
+    if (!ip || !share || !user || !pass) {
+        alert("Please fill out all fields before adding.");
+        return;
+    }
+
+    if (driveQueue.some(item => item.drive === drive)) {
+        alert(`Drive letter ${drive} is already assigned in this script!`);
+        return;
+    }
+
+    ip = ip.replace(/^\\+|\\+$/g, '');
+    share = share.replace(/^\\+|\\+$/g, '');
+
+    if (user.toLowerCase().startsWith("emet.local\\")) {
+        user = user.substring(11);
+    }
+
+    const driveData = { drive, ip, share, user, pass };
+    driveQueue.push(driveData);
+
+    renderQueue();
+
+    document.getElementById('sharePath').value = '';
+    if (!keepIp) {
+        document.getElementById('ipAddress').value = '';
+    }
+}
+
+function removeDrive(index) {
+    driveQueue.splice(index, 1);
+    renderQueue();
+}
+
+function renderQueue() {
+    const container = document.getElementById('queueContainer');
+    container.innerHTML = '';
+
+    if (driveQueue.length === 0) {
+        container.innerHTML = '<p id="emptyMessage" style="text-align: center; color: #888;">No drives added yet.</p>';
+        return;
+    }
+
+    driveQueue.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'drive-item';
+        div.innerHTML = `
+            <div>
+                <strong>${item.drive}</strong> &rarr; \\\\${item.ip}\\${item.share} (emet.local\\${item.user})
+            </div>
+            <button class="btn-delete" onclick="removeDrive(${index})">Remove</button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function buildScriptText() {
+    const runAtStartup = document.getElementById('startupToggle').checked;
+
+    let scriptContent = `@echo off\n`;
+    scriptContent += `echo ============================================\n`;
+    scriptContent += `echo     STARTING NETWORK DRIVE CONFIGURATION     \n`;
+    scriptContent += `echo ============================================\n\n`;
+
+    if (runAtStartup) {
+        scriptContent += `echo Setting up persistence via Windows Startup...\n`;
+        scriptContent += `set "startupFolder=%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"\n`;
+        scriptContent += `if not "%~dp0"=="%startupFolder%\\" (\n`;
+        scriptContent += `    copy /y "%~f0" "%startupFolder%\\map_all_network_drives.bat" >nul\n`;
+        scriptContent += `    echo Script successfully persistent in Startup folder.\n`;
+        scriptContent += `)\n\n`;
+    }
+
+    driveQueue.forEach(item => {
+        scriptContent += `echo Mapping ${item.drive} to \\\\${item.ip}\\${item.share}...\n`;
+        scriptContent += `net use ${item.drive} "\\\\${item.ip}\\${item.share}" /user:emet.local\\${item.user} "${item.pass}" /persistent:yes\n`;
+        scriptContent += `if %errorlevel% EQU 0 (\n`;
+        scriptContent += `    echo Success!\n`;
+        scriptContent += `) else (\n`;
+        scriptContent += `    echo ERROR: Failed to map ${item.drive}\n`;
+        scriptContent += `)\n\n`;
+    });
+
+    scriptContent += `echo ============================================\n`;
+    scriptContent += `echo                 PROCESS DONE                 \n`;
+    scriptContent += `echo ============================================\n`;
+    scriptContent += `pause`;
+
+    return scriptContent;
+}
+
+function generateFinalScript(action) {
+    if (driveQueue.length === 0) {
+        alert("Your queue is empty! Add at least one drive first.");
+        return;
+    }
+
+    const scriptText = buildScriptText();
+
+    if (action === 'download') {
+        const blob = new Blob([scriptText], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'map_all_network_drives.bat';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } 
+    else if (action === 'email') {
+        const emailTo = document.getElementById('emailAddress').value.trim();
+        if (!emailTo) {
+            alert("Please enter a target email address first.");
+            return;
+        }
+
+        const subject = encodeURIComponent("Automated Network Drive Map Script");
+        const body = encodeURIComponent(
+            "Hello,\n\n" +
+            "Here is the script code you generated. " +
+            "To use it, paste this text directly into Notepad and save it with a '.bat' extension:\n\n" +
+            "----------------------------\n" + 
+            scriptText + 
+            "\n----------------------------"
+        );
+
+        window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+    }
+}
+</script>
+
+</body>
+</html>
