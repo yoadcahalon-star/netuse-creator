@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Drive Network Script Generator (Separated Layout)</title>
+    <title>Multi-Drive Network Script Generator</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -142,7 +142,6 @@
             margin-top: 2px;
             font-style: italic;
         }
-        /* Specific Styles for Separated Sections */
         .section-box {
             margin-top: 20px;
             padding: 15px;
@@ -151,10 +150,10 @@
             border: 1px solid #dee2e6;
         }
         .startup-box {
-            border-left: 4px solid #ffc107; /* Warning / Amber indicator */
+            border-left: 4px solid #ffc107;
         }
         .email-box {
-            border-left: 4px solid #17a2b8; /* Teal info indicator */
+            border-left: 4px solid #17a2b8;
         }
     </style>
 </head>
@@ -271,7 +270,7 @@ function addDriveToList() {
     }
 
     if (driveQueue.some(item => item.drive === drive)) {
-        alert(`Drive letter ${drive} is already assigned in this script!`);
+        alert("Drive letter " + drive + " is already assigned in this script!");
         return;
     }
 
@@ -310,12 +309,7 @@ function renderQueue() {
     driveQueue.forEach((item, index) => {
         const div = document.createElement('div');
         div.className = 'drive-item';
-        div.innerHTML = `
-            <div>
-                <strong>${item.drive}</strong> &rarr; \\\\${item.ip}\\${item.share} (emet.local\\${item.user})
-            </div>
-            <button class="btn-delete" onclick="removeDrive(${index})">Remove</button>
-        `;
+        div.innerHTML = '<div><strong>' + item.drive + '</strong> &rarr; \\\\' + item.ip + '\\' + item.share + ' (emet.local\\' + item.user + ')</div><button class="btn-delete" onclick="removeDrive(' + index + ')">Remove</button>';
         container.appendChild(div);
     });
 }
@@ -323,34 +317,37 @@ function renderQueue() {
 function buildScriptText() {
     const runAtStartup = document.getElementById('startupToggle').checked;
 
-    let scriptContent = `@echo off\n`;
-    scriptContent += `echo ============================================\n`;
-    scriptContent += `echo     STARTING NETWORK DRIVE CONFIGURATION     \n`;
-    scriptContent += `echo ============================================\n\n`;
+    let scriptContent = "@echo off\n";
+    scriptContent += "echo ============================================\n";
+    scriptContent += "echo      STARTING NETWORK DRIVE CONFIGURATION     \n";
+    scriptContent += "echo ============================================\n\n";
 
     if (runAtStartup) {
-        scriptContent += `echo Setting up persistence via Windows Startup...\n`;
-        scriptContent += `set "startupFolder=%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"\n`;
-        scriptContent += `if not "%~dp0"=="%startupFolder%\\" (\n`;
-        scriptContent += `    copy /y "%~f0" "%startupFolder%\\map_all_network_drives.bat" >nul\n`;
-        scriptContent += `    echo Script successfully persistent in Startup folder.\n`;
-        scriptContent += `)\n\n`;
+        scriptContent += "echo Setting up persistence via Windows Startup...\n";
+        scriptContent += "set \"startupFolder=%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\"\n";
+        scriptContent += "if not \"%~dp0\"==\"%startupFolder%\\\" (\n";
+        scriptContent += "    copy /y \"%~f0\" \"%startupFolder%\\map_all_network_drives.bat\" >nul\n";
+        scriptContent += "    echo Script successfully persistent in Startup folder.\n";
+        scriptContent += ")\n\n";
     }
 
+    scriptContent += "echo Clearing existing network connections...\n";
+    scriptContent += "net use * /delete /y\n\n";
+
     driveQueue.forEach(item => {
-        scriptContent += `echo Mapping ${item.drive} to \\\\${item.ip}\\${item.share}...\n`;
-        scriptContent += `net use ${item.drive} "\\\\${item.ip}\\${item.share}" /user:emet.local\\${item.user} "${item.pass}" /persistent:yes\n`;
-        scriptContent += `if %errorlevel% EQU 0 (\n`;
-        scriptContent += `    echo Success!\n`;
-        scriptContent += `) else (\n`;
-        scriptContent += `    echo ERROR: Failed to map ${item.drive}\n`;
-        scriptContent += `)\n\n`;
+        scriptContent += "echo Mapping " + item.drive + " to \\\\" + item.ip + "\\" + item.share + "...\n";
+        scriptContent += "net use " + item.drive + " \"\\\\" + item.ip + "\\" + item.share + "\" /user:emet.local\\" + item.user + " \"" + item.pass + "\" /persistent:yes\n";
+        scriptContent += "if %errorlevel% EQU 0 (\n";
+        scriptContent += "    echo Success!\n";
+        scriptContent += ") else (\n";
+        scriptContent += "    echo ERROR: Failed to map " + item.drive + "\n";
+        scriptContent += ")\n\n";
     });
 
-    scriptContent += `echo ============================================\n`;
-    scriptContent += `echo                 PROCESS DONE                 \n`;
-    scriptContent += `echo ============================================\n`;
-    scriptContent += `pause`;
+    scriptContent += "echo ============================================\n";
+    scriptContent += "echo                 PROCESS DONE                 \n";
+    scriptContent += "echo ============================================\n";
+    scriptContent += "pause";
 
     return scriptContent;
 }
@@ -389,7 +386,7 @@ function generateFinalScript(action) {
             "\n----------------------------"
         );
 
-        window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+        window.location.href = "mailto:" + emailTo + "?subject=" + subject + "&body=" + body;
     }
 }
 </script>
